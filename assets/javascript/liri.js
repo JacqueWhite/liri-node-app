@@ -47,7 +47,7 @@ switch (argument) {
 
 function omdb() {
 	var movieName = value; 
-	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece"
+	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 
 	request(queryUrl, function(error, response, body){
 		if (error) {
@@ -103,9 +103,10 @@ function twitter() {
     //console.log(client);
     // 20 tweets
     var params = {
-        screen_name: 'gabietaylordev',
+        screen_name: 'timtimmeroo',
         limit: 20
     };
+
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         // Throw Error
         if (error) {
