@@ -12,13 +12,13 @@ var value = process.argv;
 //switch statements
 switch (argument) {
 	case "movie-this":
-		if (value === undefined){
-			console.log("Your search was undefined... but here's info on Jaws")
-			value = "Jaws";
+		// if (value === undefined){
+		// 	console.log("Your search was undefined... but here's info on Jaws")
+		// 	value = "Jaws";
+		// 	movieThis();
+		// } else {
 			movieThis();
-		} else {
-			movieThis();
-		}
+		// }
 		break;
 
 	case "spotify-this-song":
@@ -103,7 +103,7 @@ function mySpotify() {
 			var songResult = console.log("Artist: " + songInfo.artists[0].name);
 	        console.log("Song: " + songInfo.name);
 	        console.log("Album: " + songInfo.album.name);
-	        console.log("URL: " + songInfo.external_urls);
+	        console.log("URL: " + songInfo.external_urls.spotify);
 	        // console.log();
 		}
 	});
@@ -134,6 +134,7 @@ function myTwitter() {
         if (!error) {
         
             for (var i = 0; i < tweets.length; i++) {
+                console.log("");
                 console.log(tweets[i].created_at);
                 console.log(tweets[i].user.screen_name);
                 console.log(tweets[i].text);
