@@ -8,27 +8,24 @@ var keys = require('./keys');
 var argument = process.argv[2];
 var value = process.argv;
 
+var inputVal = "";
+for (var i = 3; i < value.length; i++) {
+    if (i > 2 && i < value.length) {
+    inputVal = inputVal + "+" + value[i];
+    }
+    else {
+    inputVal += value[i]; 
+    }
+}
 
 //switch statements
 switch (argument) {
 	case "movie-this":
-		// if (value === undefined){
-		// 	console.log("Your search was undefined... but here's info on Jaws")
-		// 	value = "Jaws";
-		// 	movieThis();
-		// } else {
-			movieThis();
-		// }
+		movieThis();
 		break;
 
 	case "spotify-this-song":
-		// if (value === undefined){
-		// 	console.log("Your search was undefined... but here's info on Hey Ya")
-		// 	value = "Hey Ya";
-		// // 	mySpotify();
-		// } else {
-			mySpotify();
-		// }
+		mySpotify();
 		break;
 
 	case "my-tweets":
@@ -36,7 +33,7 @@ switch (argument) {
 		break;
 
 	case "do-what-it-says":
-		readFile();
+		doIt();
 		break;
 };
 
@@ -45,18 +42,23 @@ switch (argument) {
 //movie this ---------------- 
 
 function movieThis() {
-    var movieName = "";
-    for (var i = 3; i < value.length; i++) {
-      if (i > 3 && i < value.length) {
-        movieName = movieName + "+" + value[i];
+    // var inputVal = "";
+    // for (var i = 3; i < value.length; i++) {
+    //   if (i > 3 && i < value.length) {
+    //     inputVal = inputVal + "+" + value[i];
+    //   }
+    //   else {
+    //     inputVal += value[i];
+    //   }
+    // }
+    if (!inputVal){
+        console.log("Your search was undefined... but here's info on JAWS!");
+        inputVal = "Jaws";
       }
-      else {
-        movieName += value[i];
-      }
-    }
-    console.log(movieName);
 
-	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+    console.log(inputVal);
+
+	var queryUrl = "http://www.omdbapi.com/?t=" + inputVal + "&y=&plot=short&apikey=40e9cece";
 
 	request(queryUrl, function(error, response, body){
 		if (error) {
@@ -80,19 +82,23 @@ function movieThis() {
 function mySpotify() {
 	var spotify = new Spotify(keys.spotifyKeys);
 
-    var song = "";
-    for (var i = 3; i < value.length; i++) {
-      if (i > 3 && i < value.length) {
-        song = song + "+" + value[i];
+    // var song = "";
+    // for (var i = 3; i < value.length; i++) {
+    //   if (i > 3 && i < value.length) {
+    //     song = song + "+" + value[i];
+    //   }
+    //   else {
+    //     song += value[i]; 
+    //     }
+    // }
+      if (!inputVal){
+        console.log("Your search was undefined... but here's info on Hey Ya");
+        inputVal = "Hey Ya";
       }
-      else {
-        song += value[i];
-      }
-    }
 
 	spotify.search({
 		type: 'track',
-		query: song,
+		query: inputVal,
 		limit: 5
 	}, function(error, data) {
 		// Throw Error
@@ -143,5 +149,33 @@ function myTwitter() {
         }
     });
 }
+//do what it says ---------------- 
+function doIt() {
+    fs.readFile("random.txt", "utf8", function(err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        var dataArray = data.split(",");
+        argument = dataArray[0];
+        inputVal = dataArray[1];
+        // console.log(dataArray);
+
+        switch (argument) {
+            case "movie-this":
+            movieThis();
+            break;
+
+            case "spotify-this-song":
+            mySpotify();
+            break;
+
+            case "my-tweets":
+            myTwitter();
+            break;
+    };
+  });
+}
+
+
 
 
