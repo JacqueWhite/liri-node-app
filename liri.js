@@ -4,6 +4,7 @@ var Spotify = require('node-spotify-api');
 var Twitter = require('twitter');
 var omdb = require('omdb');
 var keys = require('./keys');
+var moment = require('moment');
 
 var argument = process.argv[2];
 var value = process.argv;
@@ -11,10 +12,10 @@ var value = process.argv;
 var inputVal = "";
 for (var i = 3; i < value.length; i++) {
     if (i > 2 && i < value.length) {
-    inputVal = inputVal + "+" + value[i];
+        inputVal = inputVal + "+" + value[i];
     }
     else {
-    inputVal += value[i]; 
+        inputVal += value[i]; 
     }
 }
 
@@ -42,15 +43,7 @@ switch (argument) {
 //movie this ---------------- 
 
 function movieThis() {
-    // var inputVal = "";
-    // for (var i = 3; i < value.length; i++) {
-    //   if (i > 3 && i < value.length) {
-    //     inputVal = inputVal + "+" + value[i];
-    //   }
-    //   else {
-    //     inputVal += value[i];
-    //   }
-    // }
+
     if (!inputVal){
         console.log("Your search was undefined... but here's info on JAWS!");
         inputVal = "Jaws";
@@ -64,16 +57,21 @@ function movieThis() {
 		if (error) {
 			return console.log('Error occurred' + error)
 		}
+        body = JSON.parse(body)
 
-		if (!error && response.statusCode === 200) {
-			console.log("Title: " + JSON.parse(body).Title);
-            console.log("Release Year: " + JSON.parse(body).Year);
-            console.log("IMBD Rating: " + JSON.parse(body).imbdRating);
-            console.log("Country: " + JSON.parse(body).Country);
-            console.log("Language: " + JSON.parse(body).Language);
-            console.log("Plot: " + JSON.parse(body).Plot);
-            console.log("Actors: " + JSON.parse(body).Actors);
-		}
+        if (response.statusCode === 200){
+            if (body.Response === 'False') {
+                console.log('Error occurred:', body.Error)    
+            } else {
+                console.log("Title: " + body.Title);
+                console.log("Release Year: " + body.Year);
+                console.log("IMBD Rating: " + body.imbdRating);
+                console.log("Country: " + body.Country);
+                console.log("Language: " + body.Language);
+                console.log("Plot: " + body.Plot);
+                console.log("Actors: " + body.Actors);
+            }
+        }	
 	});
 }
  
@@ -82,15 +80,6 @@ function movieThis() {
 function mySpotify() {
 	var spotify = new Spotify(keys.spotifyKeys);
 
-    // var song = "";
-    // for (var i = 3; i < value.length; i++) {
-    //   if (i > 3 && i < value.length) {
-    //     song = song + "+" + value[i];
-    //   }
-    //   else {
-    //     song += value[i]; 
-    //     }
-    // }
       if (!inputVal){
         console.log("Your search was undefined... but here's info on Hey Ya");
         inputVal = "Hey Ya";
@@ -102,9 +91,10 @@ function mySpotify() {
 		limit: 5
 	}, function(error, data) {
 		// Throw Error
+        
 		if (error) {
 			return console.log('Error occurred' + error);
-		} else {
+		} else {            
 			var songInfo = data.tracks.items[0];
 			var songResult = console.log("Artist: " + songInfo.artists[0].name);
 	        console.log("Song: " + songInfo.name);
@@ -138,10 +128,9 @@ function myTwitter() {
         }
         // No Error
         if (!error) {
-        
             for (var i = 0; i < tweets.length; i++) {
                 console.log("");
-                console.log(tweets[i].created_at);
+                console.log(moment(tweets[i].created_at, 'ddd MMM DD HH:mm:ss Z YYYY').format('HH:mm MMM Do, YYYY'));
                 console.log(tweets[i].user.screen_name);
                 console.log(tweets[i].text);
                 console.log("");

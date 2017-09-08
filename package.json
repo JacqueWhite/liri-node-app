@@ -18,6 +18,7 @@
   "homepage": "https://github.com/JacqueWhite/liri-node-app#readme",
   "dependencies": {
     "fs": "0.0.1-security",
+    "moment": "^2.18.1",
     "node-spotify-api": "^1.0.7",
     "omdb": "^0.8.0",
     "request": "^2.81.0",
